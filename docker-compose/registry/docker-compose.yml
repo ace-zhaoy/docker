@@ -1,0 +1,13 @@
+version: '3.1'
+services:
+  registry:
+    image: "registry:latest"
+    restart: always
+    environment:
+      REGISTRY_STORAGE_DELETE_ENABLED: "true"
+    ports:
+      - 5000:5000
+    volumes:
+      - ${REGISTRY_HOME}/data:/var/lib/registry
+    network_mode: "bridge"
+    privileged: true

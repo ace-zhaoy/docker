@@ -1,0 +1,23 @@
+version: '3'
+services:
+  gitlab:
+    image: 'gitlab/gitlab-ce:latest'
+    restart: always
+    hostname: 'gitlab.zy.com'
+    environment:
+      TZ: 'Asia/Shanghai'
+      GITLAB_OMNIBUS_CONFIG: |
+        external_url 'http://gitlab.zy.com:3080'
+        gitlab_rails['gitlab_shell_ssh_port'] = 3022
+    ports:
+      - '3080:3080'
+      - '3443:443'
+      - '3022:22'
+    volumes:
+      - ${GITLAB_HOME}/data:/var/opt/gitlab
+      - ${GITLAB_HOME}/logs:/var/log/gitlab
+      - ${GITLAB_HOME}/config:/etc/gitlab
+    extra_hosts:
+      - "gitlab.zy.com:127.0.0.1"
+    network_mode: "bridge"
+    privileged: true
