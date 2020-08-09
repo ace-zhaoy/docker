@@ -1,11 +1,11 @@
 version: '3'
 services:
   php:
-    image: 192.168.159.130:5000/php:7.0.33
+    image: 192.168.159.130:5000/php:7.4.8
     restart: always
     volumes:
     - ${SOURCE_DIR}:/opt/case
-    - ${PHP_LOG_DIR}:/opt/logs/web/php/logs/
+    - ${PHP_LOG_DIR}:/opt/logs/php
     networks:
       mywebnet:
         ipv4_address: 192.168.10.3    
