@@ -3,7 +3,8 @@ MAINTAINER zhaoyang
 
 ENV INSTALL_DIR=/opt/app/php \
     PHP_VERSION=7.4.8 \
-    EX_REDIS_VERSION=5.3.1
+    EX_REDIS_VERSION=5.3.1 \
+    TZ=Asia/Shanghai
 
 ADD src/php-${PHP_VERSION}.tar.gz /tmp/
 
@@ -16,7 +17,7 @@ RUN yum -y install epel-release \
     openldap-devel libtidy-devel gmp-devel autoconf re2c libsodium-devel ImageMagick-devel cmake \
     && yum clean all -y \
     && cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
-    && echo 'Asia/Shanghai' > /etc/timezone \
+    && echo ${TZ} > /etc/timezone \
     && cd /tmp/php-${PHP_VERSION} \
     && ./configure --prefix=${INSTALL_DIR} \
     --with-config-file-path=${INSTALL_DIR}/etc \
@@ -49,7 +50,8 @@ RUN yum -y install epel-release \
     && groupadd -g 2000 httpd \
     && useradd -g 2000 -u 2000 httpd \
     && mkdir -p /opt/logs/php && chown httpd. /opt/logs/php \
-    && rm -r /tmp/php-${PHP_VERSION}
+    && rm -r /tmp/php-${PHP_VERSION} \
+    && ln -s ${INSTALL_DIR}/sbin/php-fpm /usr/bin/
 
 ADD src/redis-${EX_REDIS_VERSION}.tgz /tmp/
 
@@ -64,4 +66,4 @@ COPY ./etc/ ${INSTALL_DIR}/etc
 
 EXPOSE 9000
 
-CMD ["/opt/app/php/sbin/php-fpm", "--nodaemonize"]    
+CMD ["php-fpm", "--nodaemonize"]
