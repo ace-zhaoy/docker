@@ -17,7 +17,6 @@ RUN yum -y install gcc make pcre-devel zlib-devel wget zip unzip patch bzip2 net
     && useradd -u 2000 -d /home/httpd -s /bin/bash -g httpd -G docker httpd \
     && mkdir -p /opt/app \
     && mkdir -p /opt/case \
-    && mkdir -p ${INSTALL_DIR}/conf/sites \
     && mkdir -p ${INSTALL_DIR}/html \
     && mkdir -p ${INSTALL_DIR}/cache \
     && mkdir -p ${INSTALL_DIR}/logs \

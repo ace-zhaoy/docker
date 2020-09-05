@@ -1,7 +1,22 @@
 version: '3'
 services:
+  nginx:
+    image: nginx:1.16.0
+    restart: always
+    ports:
+    - "${NGINX_HTTP_HOST_PORT}:80"
+    - "${NGINX_HTTPS_HOST_PORT}:433"
+    volumes:
+    - ${NGINX_CONF_DIR}:/opt/app/nginx/conf/conf.d
+    - ${SOURCE_DIR}:/opt/case
+    - ${NGINX_LOG_DIR}:/opt/app/nginx/logs
+    networks:
+      mywebnet:
+        ipv4_address: 192.168.10.2
+    links:
+      - php
   php:
-    image: 192.168.159.130:5000/php:7.4.8
+    image: php:7.4.8
     restart: always
     volumes:
     - ${SOURCE_DIR}:/opt/case
