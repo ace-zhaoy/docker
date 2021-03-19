@@ -1,0 +1,41 @@
+version: '3'
+services:
+  mysql:
+    image: mysql:5.7.33
+    restart: always
+    ports:
+      - '${MYSQL_PORT}:3306'
+    volumes:
+      - ${MYSQL_DATA}:/var/lib/mysql
+      - ${MYSQL_MY_CNF}:/etc/mysql/mysql.conf.d/my.cnf
+    environment:
+      TZ: ${TZ}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    networks:
+      mywebnet:
+        ipv4_address: 192.168.11.2
+  confluence:
+    image: atlassian/confluence-server:6.15.7-alpine
+    restart: always
+    ports:
+      - '${CONFLUENCE_HOST_PORT}:8090'
+    volumes:
+      - ${ATLASSIAN_EXTRAS_DECODER}:/opt/atlassian/confluence/confluence/WEB-INF/lib/atlassian-extras-decoder-v2-3.4.1.jar
+      - ${MYSQL_DRIVER}:/opt/atlassian/confluence/confluence/WEB-INF/lib/mysql-connector-java-5.1.49-bin.jar
+      - /usr/share/zoneinfo/Asia/Shanghai:/etc/localtime
+    environment:
+      TZ: ${TZ}
+    networks:
+      mywebnet:
+        ipv4_address: 192.168.11.3
+    links:
+      - mysql
+networks:
+  mywebnet:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 192.168.11.0/24
