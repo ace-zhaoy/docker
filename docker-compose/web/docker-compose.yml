@@ -23,7 +23,24 @@ services:
     - ${PHP_LOG_DIR}:/opt/logs/php
     networks:
       mywebnet:
-        ipv4_address: 192.168.10.3    
+        ipv4_address: 192.168.10.3
+  mysql:
+    image: mysql:5.7.33
+    restart: always
+    ports:
+      - '${MYSQL_PORT}:3306'
+    volumes:
+      - ${MYSQL_DATA}:/var/lib/mysql
+      - ${MYSQL_MY_CNF}:/etc/mysql/mysql.conf.d/my.cnf
+    environment:
+      TZ: ${TZ}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    networks:
+      mywebnet:
+        ipv4_address: 192.168.10.4
 networks:
   mywebnet:
     driver: bridge
