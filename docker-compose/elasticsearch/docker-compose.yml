@@ -5,7 +5,7 @@ services:
     environment:
       - node.name=es01
       - cluster.name=es-docker-cluster
-      - discovery.seed_hosts=es02
+      - discovery.seed_hosts=elasticsearch2
       - cluster.initial_master_nodes=es01,es02
       - bootstrap.memory_lock=true
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
@@ -24,7 +24,7 @@ services:
     environment:
       - node.name=es02
       - cluster.name=es-docker-cluster
-      - discovery.seed_hosts=es01
+      - discovery.seed_hosts=elasticsearch
       - cluster.initial_master_nodes=es01,es02
       - bootstrap.memory_lock=true
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
@@ -47,8 +47,6 @@ services:
       - "5601:5601"
     networks:
       - elastic
-    links:
-      - elasticsearch
 volumes:
   data01:
     driver: local
