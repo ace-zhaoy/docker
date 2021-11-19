@@ -20,7 +20,7 @@ RUN yum -y install epel-release \
     && echo ${TZ} > /etc/timezone \
     && cd /tmp/php-${PHP_VERSION} \
     && ./configure --prefix=${INSTALL_DIR} \
-    #--with-config-file-path=${INSTALL_DIR}/etc \
+    --with-config-file-path=${INSTALL_DIR}/etc \
     --disable-ipv6 \
     --enable-bcmath \
     --enable-dba \

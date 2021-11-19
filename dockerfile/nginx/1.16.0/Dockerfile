@@ -8,7 +8,7 @@ ENV INSTALL_DIR=/opt/app/nginx \
 ADD src/nginx-${NGINX_VERSION}.tar.gz /tmp/
 
 RUN yum -y install gcc make pcre-devel zlib-devel wget zip unzip patch bzip2 net-tools perl-dev curl gd-dev luajit-dev \
-    kde-l10n-Chinese telnet reinstall glibc-common \
+    kde-l10n-Chinese telnet reinstall glibc-common openssl openssl-devel \
     && yum clean all -y \
     && cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
     && echo ${TZ} > /etc/timezone \
@@ -46,6 +46,7 @@ RUN yum -y install gcc make pcre-devel zlib-devel wget zip unzip patch bzip2 net
         --with-http_stub_status_module \
         --with-http_sub_module \
         --with-http_v2_module \
+        --with-http_ssl_module \
         --with-stream \
         --with-ld-opt="-Wl,-rpath,/usr/local/lib" \
         --with-debug \

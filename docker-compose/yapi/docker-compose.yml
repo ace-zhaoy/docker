@@ -9,19 +9,15 @@ services:
       - type: volume
         source: mongo
         target: /data/db
+      - type: bind
+        source: ./init-mongo.js
+        target: /docker-entrypoint-initdb.d/init-mongo.js
+        read_only: true
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: root123
       MONGO_INITDB_DATABASE: yapi
     restart: always
-    volumes:
-      - type: bind
-        source: ./init-mongo.js
-        target: /docker-entrypoint-initdb.d/init-mongo.js
-        read_only: true
-      - type: volume
-        source: mongo
-        target: /data/db
     networks:
       - yapi
 
