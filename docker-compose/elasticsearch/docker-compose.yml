@@ -14,7 +14,7 @@ services:
         soft: -1
         hard: -1
     volumes:
-      - data01:/usr/share/elasticsearch/data
+      - ${ES_DATA}:/usr/share/elasticsearch/data
     ports:
       - 9200:9200
     networks:
@@ -33,7 +33,7 @@ services:
         soft: -1
         hard: -1
     volumes:
-      - data02:/usr/share/elasticsearch/data
+      - ${ES2_DATA}:/usr/share/elasticsearch/data
     networks:
       - elastic
   kibana:
@@ -47,11 +47,14 @@ services:
       - "5601:5601"
     networks:
       - elastic
-volumes:
-  data01:
-    driver: local
-  data02:
-    driver: local
+  cerebro:
+    image: lmenezes/cerebro:0.9.4
+    ports:
+      - "9000:9000"
+    command:
+      - -Dhosts.0.host=http://elasticsearch:9200
+    networks:
+      - elastic
 
 networks:
   elastic:
