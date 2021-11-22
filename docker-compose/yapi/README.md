@@ -1,7 +1,7 @@
 ## 使用
 1. 部署
     ```shell script
-   mkdir -p /opt/yapi/yapi/{mongo,yapi}
+   mkdir -p /opt/app/yapi/{mongo,yapi}
    docker-compose up
     ```
 1. 访问ip:9090 ,输入相应配置
