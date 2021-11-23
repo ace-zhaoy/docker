@@ -8,11 +8,11 @@ services:
     - "${NGINX_HTTPS_HOST_PORT}:443"
     volumes:
     - ${NGINX_CONF_DIR}:/opt/app/nginx/conf/conf.d
+    - ${NGINX_SSL_DIR}:/opt/app/nginx/conf/ssl
     - ${SOURCE_DIR}:/opt/case
     - ${NGINX_LOG_DIR}:/opt/app/nginx/logs
     networks:
-      mywebnet:
-        ipv4_address: 192.168.10.2
+      - mywebnet
     links:
       - php
   php:
@@ -22,8 +22,7 @@ services:
     - ${SOURCE_DIR}:/opt/case
     - ${PHP_LOG_DIR}:/opt/logs/php
     networks:
-      mywebnet:
-        ipv4_address: 192.168.10.3
+      - mywebnet
   hyperf:
     image: hyperf/hyperf:7.4-alpine-v3.11-swoole
     restart: always
@@ -35,8 +34,7 @@ services:
     volumes:
       - ${SOURCE_DIR}:/opt/case
     networks:
-      mywebnet:
-        ipv4_address: 192.168.10.6
+      - mywebnet
   mysql:
     image: mysql:5.7.33
     restart: always
@@ -52,8 +50,7 @@ services:
       MYSQL_USER: ${MYSQL_USER}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
     networks:
-      mywebnet:
-        ipv4_address: 192.168.10.4
+      - mywebnet
   redis:
     image: bitnami/redis:5.0.14
     restart: always
@@ -65,8 +62,7 @@ services:
       - ${REDIS_CONF}:/opt/bitnami/redis/etc/redis.conf
       - ${REDIS_DATA}:/bitnami/redis/data
     networks:
-      mywebnet:
-        ipv4_address: 192.168.10.5
+      - mywebnet
 networks:
   mywebnet:
     driver: bridge

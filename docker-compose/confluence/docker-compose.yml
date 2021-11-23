@@ -15,8 +15,7 @@ services:
       MYSQL_USER: ${MYSQL_USER}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
     networks:
-      mywebnet:
-        ipv4_address: 192.168.11.2
+      - confluence
   confluence:
     image: atlassian/confluence-server:6.15.7-alpine
     restart: always
@@ -29,13 +28,12 @@ services:
     environment:
       TZ: ${TZ}
     networks:
-      mywebnet:
-        ipv4_address: 192.168.11.3
+      - confluence
     links:
       - mysql
 networks:
-  mywebnet:
+  confluence:
     driver: bridge
     ipam:
       config:
-        - subnet: 192.168.11.0/24
+        - subnet: 192.168.40.0/24
