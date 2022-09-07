@@ -18,6 +18,12 @@ services:
   php:
     image: php:7.4.8
     restart: always
+    security_opt:
+      - seccomp:unconfined
+    #cap_add:
+    #  - SYS_PTRACE
+    ports:
+      - "9100:9100"
     volumes:
     - ${SOURCE_DIR}:/opt/case
     - ${PHP_LOG_DIR}:/opt/logs/php
