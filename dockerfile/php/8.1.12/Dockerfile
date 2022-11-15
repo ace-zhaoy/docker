@@ -4,9 +4,13 @@ MAINTAINER zhaoyang
 ENV INSTALL_DIR=/opt/app/php \
     PHP_VERSION=8.1.12 \
     EX_REDIS_VERSION=5.3.7 \
+    CMAKE_VERSION=3.24.3 \
+    LIBZIP_VERSION=1.9.2 \
     TZ=Asia/Shanghai
 
 ADD src/php-${PHP_VERSION}.tar.gz /tmp/
+ADD src/cmake-${CMAKE_VERSION}.tar.gz /tmp/
+ADD src/libzip-${LIBZIP_VERSION}.tar.gz /tmp/
 
 RUN yum -y install epel-release \
     && yum update -y \
@@ -14,10 +18,21 @@ RUN yum -y install epel-release \
     openssl openssl-devel curl curl-devel libjpeg libjpeg-devel libpng  \
     pcre pcre-devel libxslt libxslt-devel bzip2 bzip2-devel oniguruma oniguruma-devel \
     php-mcrypt libmcrypt libmcrypt-devel libpng-devel libsqlite3x libsqlite3x-devel \
-    openldap-devel libtidy-devel gmp-devel autoconf re2c libsodium-devel ImageMagick-devel cmake \
+    openldap-devel libtidy-devel gmp-devel autoconf re2c libsodium-devel ImageMagick-devel \
+    bzip2 bzip2-devel \
+    && yum remove -y libzip-devel libzip cmake \
     && yum clean all -y \
     && cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
     && echo ${TZ} > /etc/timezone \
+    && cd /tmp/cmake-${CMAKE_VERSION} \
+    && ./bootstrap && gmake && make install \
+    && ln -s /usr/local/bin/cmake /usr/bin/ \
+    && cd /tmp/libzip-${LIBZIP_VERSION} && mkdir build && cd build \
+    && cmake -DCMAKE_INSTALL_PREFIX=/usr/local/lib64 .. \
+    && make && make install \
+    && echo "/usr/local/lib64" >>/etc/ld.so.conf \
+    && ldconfig \
+    && export PKG_CONFIG_PATH=/usr/local/lib64/pkgconfig/:$PKG_CONFIG_PATH \
     && cd /tmp/php-${PHP_VERSION} \
     && ./configure --prefix=${INSTALL_DIR} \
     --with-config-file-path=${INSTALL_DIR}/etc \
@@ -31,6 +46,11 @@ RUN yum -y install epel-release \
     --enable-opcache \
     --enable-pcntl \
     --enable-soap \
+    --enable-gd \
+    --enable-gd-jis-conv \
+    --with-jpeg   \
+    --with-freetype  \
+    --with-zip \
     --with-curl \
     --with-iconv \
     --with-gettext \
@@ -51,7 +71,11 @@ RUN yum -y install epel-release \
     && useradd -g 2000 -u 2000 httpd \
     && mkdir -p /opt/logs/php && chown httpd. /opt/logs/php \
     # && rm -r /tmp/php-${PHP_VERSION} \
-    && ln -s ${INSTALL_DIR}/sbin/php-fpm /usr/bin/
+    && ln -s ${INSTALL_DIR}/sbin/php-fpm /usr/bin/ \
+    && ln -s ${INSTALL_DIR}/bin/php /usr/bin/ \
+    && cd /tmp \
+    && curl -sS https://getcomposer.org/installer | php \
+    && mv composer.phar /usr/local/bin/composer
 
 ADD src/redis-${EX_REDIS_VERSION}.tgz /tmp/
 

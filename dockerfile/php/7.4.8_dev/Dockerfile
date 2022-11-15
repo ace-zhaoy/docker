@@ -28,7 +28,7 @@ RUN yum -y install epel-release \
     && ./bootstrap && gmake && make install \
     && ln -s /usr/local/bin/cmake /usr/bin/ \
     && cd /tmp/libzip-${LIBZIP_VERSION} && mkdir build && cd build \
-    && cmake -DCMAKE_INSTALL_PREFIX=/ .. \
+    && cmake -DCMAKE_INSTALL_PREFIX=/usr/local/lib64/ .. \
     && make && make install \
     && echo "/usr/local/lib64" >>/etc/ld.so.conf \
     && ldconfig \
