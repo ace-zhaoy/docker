@@ -3,8 +3,6 @@ version: '3.7'
 services:
   mongo:
     image: mongo:4
-    ports:
-      - "27017:27017"
     volumes:
       - type: volume
         source: mongo
@@ -15,7 +13,7 @@ services:
         read_only: true
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: root123
+      MONGO_INITDB_ROOT_PASSWORD: Rr9NFpf3hLD2s
       MONGO_INITDB_DATABASE: yapi
     restart: always
     networks:
@@ -24,7 +22,10 @@ services:
   yapi:
     depends_on:
       - mongo
-    image: yapi:1.9.2
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: yapi:latest
     command: "yapi server"              #第一次启动使用
 #    command: "node /yapi/vendors/server/app.js"             #后面启动使用
     ports:

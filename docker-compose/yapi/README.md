@@ -1,4 +1,5 @@
 ## 使用
+1. 修改 init-mongo.js配置，修改mongo密码
 1. 部署
     ```shell script
    mkdir -p /opt/app/yapi/{mongo,yapi}
