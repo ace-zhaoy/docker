@@ -1,0 +1,21 @@
+version: '3'
+services:
+  clickhouse:
+    image: clickhouse/clickhouse-server
+    restart: always
+    ports:
+      - "8123:8123"
+      - "19000:9000"
+    volumes:
+      - /opt/app/clickhouse/config/config.xml:/etc/clickhouse-server/config.xml
+      - /opt/app/clickhouse/config/users.xml:/etc/clickhouse-server/users.xml
+      - /opt/app/clickhouse/data:/var/lib/clickhouse
+      - /opt/app/clickhouse/log:/var/log/clickhouse-server
+    networks:
+      - myclickhousenet
+networks:
+  myclickhousenet:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 192.168.60.0/24
