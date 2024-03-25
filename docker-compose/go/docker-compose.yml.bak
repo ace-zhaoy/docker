@@ -1,0 +1,19 @@
+version: '3'
+services:
+  gin:
+    image: golang:1.17.3
+    restart: always
+    tty: true
+    ports:
+      - "8080:8080"
+    volumes:
+      - /opt/case:/opt/case
+    #command: "go run /opt/case/gin.demo/main.go"
+    networks:
+      - mygonet
+networks:
+  mygonet:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 192.168.50.0/24
