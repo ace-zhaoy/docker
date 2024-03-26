@@ -2,7 +2,7 @@ version: '3'
 services:
   gate:
     build:
-      context: .
+      context: ..
       dockerfile: Dockerfile
     image: my_golang:1.18.1
     working_dir: /go/src/gate
@@ -19,7 +19,7 @@ services:
         ipv4_address: 192.168.10.2
   user:
     build:
-      context: .
+      context: ..
       dockerfile: Dockerfile
     image: my_golang:1.18.1
     working_dir: /go/src/user
@@ -36,7 +36,7 @@ services:
         ipv4_address: 192.168.10.3
   event:
     build:
-      context: .
+      context: ..
       dockerfile: Dockerfile
     image: my_golang:1.18.1
     working_dir: /go/src/event
