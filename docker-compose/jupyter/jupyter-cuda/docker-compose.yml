@@ -5,6 +5,8 @@ services:
       context: .
       dockerfile: Dockerfile
     restart: always
+    mem_limit: 4G
+    memswap_limit: 32G
     ports:
       - "8888:8888"
     deploy:
@@ -20,3 +22,6 @@ services:
       - type: bind
         source: ./notebooks
         target: /app
+      - type: bind
+        source: ./.jupyter
+        target: /root/.jupyter
