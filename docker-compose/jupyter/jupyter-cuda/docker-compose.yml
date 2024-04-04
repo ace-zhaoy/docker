@@ -1,12 +1,8 @@
 version: '3'
 services:
   jupyterlab:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    image: acezhaoy/jupyterlab-cuda12.3.2:latest
     restart: always
-    mem_limit: 4G
-    memswap_limit: 32G
     ports:
       - "8888:8888"
     deploy:
