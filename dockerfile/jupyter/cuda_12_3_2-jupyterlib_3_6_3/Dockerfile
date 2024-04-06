@@ -11,7 +11,8 @@ RUN apt-get update &&  \
     python3-pip \
     curl && \
     curl -fsSL https://deb.nodesource.com/setup_18.x | bash - && \
-    apt-get install -y nodejs
+    apt-get install -y nodejs && \
+    apt-get install -y ripgrep
 
 RUN pip3 install --upgrade pip && pip3 install --no-cache-dir \
     jupyterlab==3.6.3 \
@@ -20,7 +21,8 @@ RUN pip3 install --upgrade pip && pip3 install --no-cache-dir \
     jupyterlab-language-pack-zh-CN \
     jupyterlab-lsp \
     python-lsp-server[all] \
-    jupyterlab_execute_time==2.3.1
+    jupyterlab_execute_time==2.3.1 \
+    jupyterlab-search-replace==1.0.2
 
 RUN jupyter lab build
 
