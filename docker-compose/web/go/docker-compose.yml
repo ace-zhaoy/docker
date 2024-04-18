@@ -1,59 +1,49 @@
-version: '3'
 services:
   gate:
-    build:
-      context: ..
-      dockerfile: Dockerfile
-    image: my_golang:1.18.1
-    working_dir: /go/src/gate
+    image: acezhaoy/alpine-tz
+    container_name: useful-gate
     restart: always
-    tty: true
+    working_dir: /app
     ports:
       - "80:80"
     volumes:
-      - ${USEFUL_PATH}:/go/src
-      - ${SSH_PATH}:/root/.ssh
-    command: go run main.go
+      - $PROJECT_BASE_PATH/gate/bin:/app
+    command: ./gate
     networks:
-      mygonet:
-        ipv4_address: 192.168.10.2
+      mywebnet:
+        aliases:
+          - svc-gate.default.svc.cluster.local
   user:
-    build:
-      context: ..
-      dockerfile: Dockerfile
-    image: my_golang:1.18.1
-    working_dir: /go/src/user
+    image: acezhaoy/alpine-tz
+    container_name: useful-user
     restart: always
-    tty: true
+    working_dir: /app
     ports:
       - "8081:80"
     volumes:
-      - ${USEFUL_PATH}:/go/src
-      - ${SSH_PATH}:/root/.ssh
-    command: go run main.go
+      - $PROJECT_BASE_PATH/user/bin:/app
+    command: ./user
     networks:
-      mygonet:
-        ipv4_address: 192.168.10.3
-  event:
-    build:
-      context: ..
-      dockerfile: Dockerfile
-    image: my_golang:1.18.1
-    working_dir: /go/src/event
+      mywebnet:
+        aliases:
+          - svc-user.default.svc.cluster.local
+  data:
+    image: acezhaoy/alpine-tz
+    container_name: useful-data
     restart: always
-    tty: true
+    working_dir: /app
     ports:
-      - "8086:80"
+      - "8082:80"
     volumes:
-      - ${USEFUL_PATH}:/go/src
-      - ${SSH_PATH}:/root/.ssh
-    command: go run cmd/app/main.go
+      - $PROJECT_BASE_PATH/data/bin:/app
+    command: ./data
     networks:
-      mygonet:
-        ipv4_address: 192.168.10.8
+      mywebnet:
+        aliases:
+          - svc-data.default.svc.cluster.local
 networks:
-  mygonet:
+  mywebnet:
     driver: bridge
     ipam:
       config:
-        - subnet: 192.168.10.0/24
+        - subnet: 10.101.1.0/24
