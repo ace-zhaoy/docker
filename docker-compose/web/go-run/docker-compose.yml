@@ -1,0 +1,59 @@
+version: '3'
+services:
+  gate:
+    build:
+      context: ..
+      dockerfile: Dockerfile
+    image: my_golang:1.18.1
+    working_dir: /go/src/gate
+    restart: always
+    tty: true
+    ports:
+      - "80:80"
+    volumes:
+      - ${USEFUL_PATH}:/go/src
+      - ${SSH_PATH}:/root/.ssh
+    command: go run main.go
+    networks:
+      mygonet:
+        ipv4_address: 192.168.10.2
+  user:
+    build:
+      context: ..
+      dockerfile: Dockerfile
+    image: my_golang:1.18.1
+    working_dir: /go/src/user
+    restart: always
+    tty: true
+    ports:
+      - "8081:80"
+    volumes:
+      - ${USEFUL_PATH}:/go/src
+      - ${SSH_PATH}:/root/.ssh
+    command: go run main.go
+    networks:
+      mygonet:
+        ipv4_address: 192.168.10.3
+  event:
+    build:
+      context: ..
+      dockerfile: Dockerfile
+    image: my_golang:1.18.1
+    working_dir: /go/src/event
+    restart: always
+    tty: true
+    ports:
+      - "8086:80"
+    volumes:
+      - ${USEFUL_PATH}:/go/src
+      - ${SSH_PATH}:/root/.ssh
+    command: go run cmd/app/main.go
+    networks:
+      mygonet:
+        ipv4_address: 192.168.10.8
+networks:
+  mygonet:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 192.168.10.0/24
