@@ -12,7 +12,8 @@ RUN apt-get update &&  \
     curl && \
     curl -fsSL https://deb.nodesource.com/setup_18.x | bash - && \
     apt-get install -y nodejs && \
-    apt-get install -y ripgrep
+    apt-get install -y ripgrep && \
+    rm -rf /var/lib/apt/lists/*
 
 RUN pip3 install --upgrade pip && pip3 install --no-cache-dir \
     jupyterlab==3.6.3 \

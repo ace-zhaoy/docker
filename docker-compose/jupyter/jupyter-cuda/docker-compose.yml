@@ -1,4 +1,3 @@
-version: '3'
 services:
   jupyterlab:
     image: acezhaoy/jupyterlab-cuda12.3.2:latest
