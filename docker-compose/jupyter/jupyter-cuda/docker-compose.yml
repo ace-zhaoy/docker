@@ -1,6 +1,6 @@
 services:
   jupyterlab:
-    image: acezhaoy/jupyterlab-cuda12.3.2:latest
+    image: acezhaoy/jupyterlab3.6-cuda12.3:latest
     restart: always
     ports:
       - "8888:8888"
