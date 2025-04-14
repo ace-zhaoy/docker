@@ -1,0 +1,26 @@
+services:
+  postgres:
+    image: postgres:15  # 可以使用特定版本如 postgres:15
+    container_name: postgres
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}  # 默认用户postgres
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-changeme}  # 默认密码changeme
+      POSTGRES_DB: ${POSTGRES_DB:-mydatabase}  # 默认数据库mydatabase
+      PGDATA: /var/lib/postgresql/data/pgdata  # 可选：自定义数据目录
+    volumes:
+      - ${POSTGRES_DATA_DIR:-./data/postgres}:/var/lib/postgresql/data  # 数据卷挂载
+    #  - ${POSTGRES_INIT_SCRIPTS_DIR:-./init-scripts}:/docker-entrypoint-initdb.d  # 初始化脚本
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"  # 默认端口5432
+    #restart: always
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-postgres}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - postgres-net
+
+networks:
+  postgres-net:
+    driver: bridge
